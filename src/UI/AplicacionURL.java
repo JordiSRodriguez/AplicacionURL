@@ -7,6 +7,9 @@ import java.io.*;
 
 import javax.swing.*;
 
+/**
+ * Clase que contiene la interfaz gráfica de la aplicación.
+ */
 public class AplicacionURL extends JFrame implements ActionListener {
 
     private JTextField urlField;
@@ -16,7 +19,6 @@ public class AplicacionURL extends JFrame implements ActionListener {
     private JButton aceptarButton;
     private JButton ayudaButton;
     private JLabel autorLabel;
-
     private JPanel panelPing;
     private JTextArea pingArea;
     private JPanel panelTracert;
@@ -27,15 +29,22 @@ public class AplicacionURL extends JFrame implements ActionListener {
     private JTextArea curlArea;
     private JPanel panelTelnet;
     private JTextArea telnetArea;
-
     private JTabbedPane tabbedPane;
-
     private static final String AUTOR = "Jordi Sumba";
 
     private Process process;
 
+    /**
+     * Método principal de la aplicación.
+     * @throws IOException Excepción de entrada/salida.
+     * @throws InterruptedException Excepción de interrupción.
+     * @throws UnsupportedLookAndFeelException Excepción de look and feel no soportado.
+     * @throws ClassNotFoundException Excepción de clase no encontrada.
+     * @throws InstantiationException Excepción de instanciación.
+     * @throws IllegalAccessException Excepción de acceso ilegal.
+     */
     public AplicacionURL() {
-        super("Aplicacion URL");
+        super("Aplicacion URL - Jordi Sumba");
 
         urlField = new JTextField(30);
         outputArea = new JTextArea(40, 70);
@@ -46,15 +55,78 @@ public class AplicacionURL extends JFrame implements ActionListener {
         autorLabel = new JLabel("Autor: " + AUTOR);
         pingArea = new JTextArea(40, 90);
         pingArea.setEditable(false);
+        pingArea.setLineWrap(true);
+        pingArea.setWrapStyleWord(true);
         tracertArea = new JTextArea(40, 90);
         tracertArea.setEditable(false);
+        tracertArea.setLineWrap(true);
+        tracertArea.setWrapStyleWord(true);
         nslookupArea = new JTextArea(40, 90);
         nslookupArea.setEditable(false);
+        nslookupArea.setLineWrap(true);
+        nslookupArea.setWrapStyleWord(true);
         curlArea = new JTextArea(40, 90);
         curlArea.setEditable(false);
+        curlArea.setLineWrap(true);
+        curlArea.setWrapStyleWord(true);
         telnetArea = new JTextArea(40, 90);
         telnetArea.setEditable(false);
+        telnetArea.setLineWrap(true);
+        telnetArea.setWrapStyleWord(true);
         tabbedPane = new JTabbedPane();
+
+
+        JMenuBar mb = new JMenuBar();
+        setJMenuBar(mb);
+        JMenu menuVista = new JMenu("Vista");
+        mb.add(menuVista);
+        JMenu menu1 = new JMenu("Tamaño");
+        menuVista.add(menu1);
+        JMenuItem item1 = new JMenuItem("Pequeño");
+        JMenuItem item2 = new JMenuItem("Mediano");
+        JMenuItem item3 = new JMenuItem("Grande");
+        menu1.add(item1);
+        menu1.add(item2);
+        menu1.add(item3);
+        JMenuItem fullScreen = new JMenuItem("Pantalla Completa");
+        menuVista.add(fullScreen);
+
+        /**
+         * Acciones de los botones de la barra de menú.
+         */
+        fullScreen.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+        });
+        item1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setSize(600, 450);
+            }
+        });
+        item2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setSize(900, 600);
+            }
+        });
+        item3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setSize(1200, 900);
+            }
+        });
+        JMenu menu2 = new JMenu("Extra");
+        mb.add(menu2);
+        JMenuItem acercaDe = new JMenuItem("Acerca de");
+        menu2.add(acercaDe);
+
+        /**
+         * Acción del botón de acerca de.
+         */
+        acercaDe.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarAcercaDe();
+            }
+        });
 
         JPanel urlPanel = new JPanel();
         urlPanel.add(new JLabel("URL: "));
@@ -68,45 +140,73 @@ public class AplicacionURL extends JFrame implements ActionListener {
 
 
         JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.add(autorLabel, BorderLayout.WEST);
         bottomPanel.add(buttonPanel, BorderLayout.EAST);
 
         panelPing = new JPanel();
-        panelPing.add(new JScrollPane(pingArea));
+        JScrollPane scrollPanePing = new JScrollPane(pingArea);
+        scrollPanePing.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPanePing.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        panelPing.add(scrollPanePing);
 
         panelTracert = new JPanel();
-        panelTracert.add(new JScrollPane(tracertArea));
+        JScrollPane scrollPaneTracert = new JScrollPane(tracertArea);
+        scrollPaneTracert.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneTracert.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        panelTracert.add(scrollPaneTracert);
 
         panelNslookup = new JPanel();
-        panelNslookup.add(new JScrollPane(nslookupArea));
+        JScrollPane scrollPaneNslookup = new JScrollPane(nslookupArea);
+        scrollPaneNslookup.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneNslookup.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        panelNslookup.add(scrollPaneNslookup);
 
         panelCurl = new JPanel();
-        panelCurl.add(new JScrollPane(curlArea));
+        JScrollPane scrollPaneCurl = new JScrollPane(curlArea);
+        scrollPaneCurl.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneCurl.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        panelCurl.add(scrollPaneCurl);
 
         panelTelnet = new JPanel();
-        panelTelnet.add(new JScrollPane(telnetArea));
+        JScrollPane scrollPaneTelnet = new JScrollPane(telnetArea);
+        scrollPaneTelnet.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneTelnet.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        panelTelnet.add(scrollPaneTelnet);
 
         tabbedPane.addTab("Ping", panelPing);
+        tabbedPane.setToolTipTextAt(0, "Muestra el resultado del comando ping.");
         tabbedPane.addTab("Tracert", panelTracert);
+        tabbedPane.setToolTipTextAt(1, "Muestra el resultado del comando tracert.");
         tabbedPane.addTab("Nslookup", panelNslookup);
+        tabbedPane.setToolTipTextAt(2, "Muestra el resultado del comando nslookup.");
         tabbedPane.addTab("Curl", panelCurl);
+        tabbedPane.setToolTipTextAt(3, "Muestra el resultado del comando curl.");
         tabbedPane.addTab("Telnet", panelTelnet);
+        tabbedPane.setToolTipTextAt(4, "Muestra el resultado del comando telnet.");
 
         getContentPane().add(urlPanel, BorderLayout.NORTH);
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
         getContentPane().add(bottomPanel, BorderLayout.PAGE_END);
 
         limpiarButton.addActionListener(this);
+        limpiarButton.setToolTipText("Limpia el area de texto actual.");
         cancelarButton.addActionListener(this);
+        cancelarButton.setToolTipText("Cancela los procesos activos.");
         aceptarButton.addActionListener(this);
+        aceptarButton.setToolTipText("Ejecuta todos los comandos con la url especificada.");
         ayudaButton.addActionListener(this);
+        ayudaButton.setToolTipText("Abre una nueva ventana con informacion para ayudar al usuario.");
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setVisible(true);
+        setResizable(true);
     }
 
 
+    /**
+     * Método que ejecuta el comando ping.
+     * @param e the event to be processed
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == limpiarButton) {
             urlField.setText("");
@@ -126,6 +226,7 @@ public class AplicacionURL extends JFrame implements ActionListener {
             if (!url.isEmpty()) {
                 ejecutarComando("ping " + url, pingArea);
                 ejecutarComando("curl " + url, curlArea);
+                //ejecutarTelnet(url, 80, telnetArea);
                 ejecutarTelnet(url, 80, telnetArea);
                 ejecutarComando("nslookup " + url, nslookupArea);
                 try {
@@ -137,26 +238,17 @@ public class AplicacionURL extends JFrame implements ActionListener {
                 new Thread(new Runnable() {
                     public void run() {
                         try {
-                            process = Runtime.getRuntime().exec("tracert -d " + url);
+                            process = Runtime.getRuntime().exec("tracert" + " -d" + " -w" + " 5 " + url);
                             BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
                             String linea;
                             tracertArea.append("Hecho por Jordi Sumba\n\n");
-                            tracertArea.append("Comando: tracert -d " + url + "\n");
+                            tracertArea.append("Comando: tracert -d -w 5 " + url + "\n");
                             while ((linea = br.readLine()) != null) {
                                 tracertArea.append(linea + "\n");
                             }
                             tracertArea.append("\n");
                             tracertArea.setCaretPosition(tracertArea.getDocument().getLength());
                             process.waitFor();
-
-                            process = Runtime.getRuntime().exec("tracert " + url);
-                            br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                            tracertArea.append("Comando: tracert " + url + "\n");
-                            while ((linea = br.readLine()) != null) {
-                                tracertArea.append(linea + "\n");
-                            }
-                            tracertArea.append("\n");
-                            tracertArea.setCaretPosition(tracertArea.getDocument().getLength());
                         } catch (IOException | InterruptedException ex) {
                             tracertArea.append("Error al ejecutar el comando: " + ex.getMessage() + "\n\n");
                             tracertArea.setCaretPosition(tracertArea.getDocument().getLength());
@@ -173,6 +265,11 @@ public class AplicacionURL extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Método con el que se ejecutan los comandos de manera multihilo.
+     * @param comando Comando a ejecutar.
+     * @param outputArea Area de texto donde se muestra el resultado del comando.
+     */
     private void ejecutarComando(String comando, JTextArea outputArea) {
         new Thread(new Runnable() {
             public void run() {
@@ -198,37 +295,58 @@ public class AplicacionURL extends JFrame implements ActionListener {
         }).start();
     }
 
-    public void ejecutarTelnet(String url, int port, JTextArea outputArea) {
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    ProcessBuilder pb = new ProcessBuilder();
-                    pb.redirectErrorStream(true);
-                    process = new ProcessBuilder("telnet", url, Integer.toString(port)).start();
-                    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
-                    BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    process.waitFor();
-                    bw.newLine();
-                    bw.write("get \\");
-                    bw.flush();
 
-                    String linea;
-                    while ((linea = br.readLine()) != null) {
-                        outputArea.append(linea + "\n");
-                    }
-                    outputArea.append("\n");
-                    outputArea.setCaretPosition(outputArea.getDocument().getLength());
-                } catch (IOException ex) {
-                    outputArea.append("Error al ejecutar el comando: " + ex.getMessage() + "\n\n");
-                    outputArea.setCaretPosition(outputArea.getDocument().getLength());
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+    /**
+     * Método con el que se ejecuta el comando telnet de manera multihilo.
+     */
+    public class TelnetThread extends Thread {
+        private String url;
+        private JTextArea outputArea;
+
+        public TelnetThread(String url, JTextArea outputArea) {
+            this.url = url;
+            this.outputArea = outputArea;
+        }
+
+        public void run() {
+            String info = "";
+            String[] cmd = {"cmd", "/C", "start", "/WAIT", "C:/Windows/system32/Telnet.exe", "-f", "C:/Windows/Temp/salidaTelnet.txt", url, "80"};
+            try {
+                Process p = Runtime.getRuntime().exec(cmd);
+                File file = new File("C:/Windows/Temp/salidaTelnet.txt");
+                file.createNewFile();
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String linea;
+                while ((linea = br.readLine()) != null) {
+                    outputArea.append(linea + "\n");
                 }
+                outputArea.append("\n");
+                outputArea.setCaretPosition(outputArea.getDocument().getLength());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            }
-        ).start();
+            outputArea.append(info);
+        }
     }
 
+    /**
+     * Método con el que se ejecuta el comando telnet de manera multihilo.
+     * @param url URL a la que se va a hacer la conexión.
+     * @param port Puerto al que se va a hacer la conexión.
+     * @param outputArea Area de texto donde se muestra el resultado del comando.
+     */
+    public void ejecutarTelnet(String url, int port, JTextArea outputArea) {
+        TelnetThread telnetThread = new TelnetThread(url, outputArea);
+        telnetThread.start();
+    }
+
+    /**
+     * Método con el que se muestra la ventana de Acerca de.
+     * @see JFrame
+     * @see JLabel
+     * @see JButton
+     * @see JPanel
+     */
     private void mostrarAyuda() {
         JFrame ventanaAyuda = new JFrame("Ayuda");
         ventanaAyuda.setSize(600, 400);
@@ -284,6 +402,11 @@ public class AplicacionURL extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * Método con el que se muestra la ventana de Acerca de.
+     * @see JOptionPane
+     * @see String
+     */
     private void mostrarAcercaDe() {
         final String autor = "Jordi Sumba";
         final String nombreApp = "Aplicacion URL";
@@ -296,6 +419,10 @@ public class AplicacionURL extends JFrame implements ActionListener {
         JOptionPane.showMessageDialog(this, acercaDe, "Acerca de", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     * Metodo en el que se ejecuta la aplicación.
+     * @param args Argumentos de la aplicación.
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
