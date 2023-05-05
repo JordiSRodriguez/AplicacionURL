@@ -3,6 +3,8 @@ package UI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.io.*;
 
 import javax.swing.*;
@@ -35,7 +37,7 @@ public class AplicacionURL extends JFrame implements ActionListener {
     private Process process;
 
     /**
-     * Método principal de la aplicación.
+     * Método principal de la aplicación que crea la interfaz gráfica, la hace visible y la centra.
      * @throws IOException Excepción de entrada/salida.
      * @throws InterruptedException Excepción de interrupción.
      * @throws UnsupportedLookAndFeelException Excepción de look and feel no soportado.
@@ -57,6 +59,7 @@ public class AplicacionURL extends JFrame implements ActionListener {
         pingArea.setEditable(false);
         pingArea.setLineWrap(true);
         pingArea.setWrapStyleWord(true);
+
         tracertArea = new JTextArea(40, 90);
         tracertArea.setEditable(false);
         tracertArea.setLineWrap(true);
@@ -204,7 +207,7 @@ public class AplicacionURL extends JFrame implements ActionListener {
 
 
     /**
-     * Método que ejecuta el comando ping.
+     * Método que ejecuta el comando ping, curl y telnet, y muestra el resultado en el area de texto correspondiente.
      * @param e the event to be processed
      */
     public void actionPerformed(ActionEvent e) {
